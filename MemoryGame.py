@@ -1,16 +1,13 @@
 import random
 import time
-
-
-def clear_screen():
-    print("\n" * 50)
+import Utils
 
 
 def display_numbers(numbers, duration):
     print("Remember these numbers:")
     print(" ".join(map(str, numbers)))
     time.sleep(duration)
-    clear_screen()
+    Utils.clear_screen()
 
 
 def generate_sequence(difficulty):
