@@ -15,52 +15,66 @@ a. for given difficulty d, and total value of money t the interval will be: (t -
 value to a given amount of USD
 3. play - Will call the functions above and play the game. Will return True / False if the user
 lost or won."""
-
-# import random
-# from Live import open_game
-# import requests
-#
-# access_key = "90255cc2b8da350406d10cbecba25795"
-#
-#
-#
-# def get_money_interval(difficulty):
-#     response = requests.get("https://api.exchangeratesapi.io/latest?base=USD")
-#     data = response.json()
-#     usd_to_ils = data["rates"]["ILS"]
-#     total_value_of_money = random.randint(1, 100)
-#     interval = (total_value_of_money - (5 - difficulty), total_value_of_money + (5 - difficulty))
-#     return interval
-#
-#
-#
-#
-# def play(difficulty):
-#     secret_number = generate_number(difficulty)
-#     user_guess = get_guess_from_user(difficulty)
-#     return compare_results(secret_number, user_guess)
-
-import requests
 import random
+import requests
 
-class CurrencyGuessGame:
-    def __init__(self, access_key):
-        self.difficulty = 1
-        self.total_value_of_money = 0
-        self.access_key = "90255cc2b8da350406d10cbecba25795"
 
-    def get_money_interval(self):
-        url = f'https://api.exchangeratesapi.io/latest?base=USD&symbols=ILS&access_key={self.access_key}'
-        response = requests.get(url)
+# work
+def exchange_rate_api():
+    # For now, I will use a free API to get the exchange rate data of EUR to ILS
+    url = "http://api.exchangeratesapi.io/v1/latest?access_key=90255cc2b8da350406d10cbecba25795&symbols=ILS"
+    response = requests.get(url)
 
-        if response.status_code == 200:
-            data = response.json()
-            exchange_rate = data['rates']['ILS']
-            lower_bound = self.total_value_of_money - (5 - self.difficulty)
-            upper_bound = self.total_value_of_money + (5 - self.difficulty)
-            return lower_bound * exchange_rate, upper_bound * exchange_rate
-        else:
-            raise Exception("Failed to get exchange rate data. Please try again later.")
+    if response.status_code == 200:
+        data = response.json()
+        exchange_rate = data['rates']['ILS']
+        return exchange_rate
+    else:
+        raise Exception("Failed to get exchange rate data. Please try again later.")
 
-    # Other methods remain unchanged...
-CurrencyGuessGame()
+
+# --------------------------------------------------------------------
+
+def get_guess_from_user(total_value):
+    guess = float(input(f"Guess the value of {total_value} EUR in ILS: "))
+    return guess
+
+
+def get_money_interval(difficulty, exchange_rate):
+    total_value = random.randint(1, 100)  # Generate a random total value of money
+    interval = (total_value - (5 - difficulty) * exchange_rate,
+                total_value + (5 - difficulty) * exchange_rate)
+    return total_value, interval
+
+
+def play(difficulty):
+    exchange_rate = exchange_rate_api()
+    total_value, interval = get_money_interval(difficulty, exchange_rate)
+    user_guess = get_guess_from_user(total_value)
+
+    if interval[0] <= user_guess <= interval[1]:
+        print("Congratulations! Your guess is within the correct range.")
+    else:
+        print("Sorry, your guess is not within the correct range.")
+
+    play_again = input("Do you want to play again? (y/n) ").lower()
+    if play_again == "y":
+        play(difficulty)
+    else:
+        print("Thank you for playing, see you next time!")
+        return
+
+
+def main(difficulty):
+    exchange_rate = exchange_rate_api()
+    game = play(difficulty, exchange_rate)
+
+    result = game.play()
+    if result:
+        print("You won!")
+    else:
+        print("You lost!")
+
+
+if __name__ == "__main__":
+    play()
