@@ -17,6 +17,7 @@ value to a given amount of USD
 lost or won."""
 import random
 import requests
+# from Score import add_score_board
 
 
 # work
@@ -53,9 +54,11 @@ def play(difficulty):
     user_guess = get_guess_from_user(total_value)
 
     if interval[0] <= user_guess <= interval[1]:
-        print("Congratulations! Your guess is within the correct range.")
+        print("Congratulations! Your guess is within the correct range.\n"
+              "The correct answer is: {:.2f} ILS".format(total_value * exchange_rate))
     else:
-        print("Sorry, your guess is not within the correct range.")
+        print("Sorry, your guess is not within the correct range.\n"
+              "The correct answer is: {:.2f} ILS".format(total_value * exchange_rate))
 
     play_again = input("Do you want to play again? (y/n) ").lower()
     if play_again == "y":
@@ -77,4 +80,4 @@ def main(difficulty):
 
 
 if __name__ == "__main__":
-    play()
+    play(difficulty=1)
