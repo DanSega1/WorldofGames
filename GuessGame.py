@@ -1,4 +1,5 @@
 import random
+# from Score import add_score_board
 
 
 def generate_number(difficulty):
@@ -23,6 +24,7 @@ def play(difficulty):
     user_guess = get_guess_from_user(difficulty)
     if secret_number == user_guess:
         print("You won! The number was {}".format(secret_number))
+        # add_score_board()
     else:
         print("You lost! The number was {}".format(secret_number))
 
@@ -35,4 +37,4 @@ def play(difficulty):
 
 
 if __name__ == "__main__":
-    play()
+    play(difficulty=1)
