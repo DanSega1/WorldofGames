@@ -1,6 +1,7 @@
 import random
 import time
 import Utils
+# from Score import add_score
 
 
 def display_numbers(numbers, duration):
@@ -38,6 +39,7 @@ def play(difficulty):
     print(user_list)
     if generated_list == user_list:
         print("You won!")
+        # add_score(difficulty)
     else:
         print("You lost!")
     play_again = input("Do you want to play again? (y/n) ").lower()
