@@ -1,35 +1,4 @@
-"""This file’s sole purpose is to serve the user’s score currently in the scores.txt file over HTTP with
-HTML. This will be done by using python’s flask library.
-
-1. score_server - This function will serve the score. It will read the score from the scores file
-and will return an HTML that will be as follows:
-
-<html>
-    <head>
-        <title>Scores Game</title>
-    </head>
-    <body>
-        <h1>The score is <div id="score">{SCORE}</div></h1>
-    </body>
-</html>
-
-If the function will have a problem showing the result of reading the error it will return the
-following:
-
-<html>
-    <head>
-        <title>Scores Game</title>
-    </head>
-    <body>
-    <body>
-        <h1><div id="score" style="color:red">{ERROR}</div></h1>
-    </body>
-</html>
-"""
-from flask import Flask
-from flask import render_template_string
-import csv
-import os
+from flask import Flask, render_template_string
 
 app = Flask(__name__)
 
@@ -47,10 +16,27 @@ def score_server():
         html = f'''
         <html>
             <head>
-                <title>Scores Game</title>
+                <title>World of Games</title>
+                <style>
+                    body {{
+                        text-align: center;
+                        background-color: #f0f0f0;
+                        font-family: 'Poppins', sans-serif;
+                    }}
+                    .title {{
+                        font-size: 48px;
+                        font-weight: bold;
+                        margin-top: 20px;
+                    }}
+                    h1 {{
+                        font-family: 'Poppins', sans-serif;
+                        font-size: 24px;
+                        color: green;
+                    }}
+                </style>
             </head>
             <body>
-                <h1><div id="score" style="color:red">{score}</div></h1>
+                <h1>{score}</h1>
             </body>
         </html>
         '''
@@ -58,10 +44,28 @@ def score_server():
         html = f'''
         <html>
             <head>
-                <title>Scores Game</title>
+                <title>World of Games</title>
+                <style>
+                    body {{
+                        text-align: center;
+                        background-color: #f0f0f0;
+                        font-family: 'Poppins', sans-serif;
+                    }}
+                    .title {{
+                        font-size: 64px;
+                        font-weight: bold;
+                        margin-top: 20px;
+                    }}
+                    h1 {{
+                        font-family: 'Poppins', sans-serif;
+                        font-size: 34px;
+                        color: green;
+                    }}
+                </style>
             </head>
             <body>
-                <h1>The score is <div id="score">{score}</div></h1>
+                <h1 class="title">World of Games</h1>
+                <h1>The global score is {score} pt</h1>
             </body>
         </html>
         '''
