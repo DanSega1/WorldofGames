@@ -1,0 +1,6 @@
+random
+pyfiglet
+colorama
+requests
+csv
+prettytable
