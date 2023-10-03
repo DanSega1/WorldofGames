@@ -1,7 +1,6 @@
-import os
-import Score
-from prettytable import PrettyTable
 import csv
+from Score import Score  # Import the Score class from your Score.py module
+from prettytable import PrettyTable
 import pyfiglet
 from colorama import Fore, Style
 
@@ -23,26 +22,34 @@ def display_scoreboard(table):
 
 
 def collect_data(username, game_name, score):
-    # Check if the file exists and is empty, write the header if needed
-    if not os.path.isfile('scoreboard.csv') or os.stat('scoreboard.csv').st_size == 0:
-        with open('scoreboard.csv', mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["Username", "Game Name", "Score"])
+    # Initialize the Score class
+    score_manager = Score()
 
-    # Collect data into the CSV file
-    with open('scoreboard.csv', mode='a', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow([username, game_name, score])
+    # Use the add_score_csv method to collect data into the CSV file
+    score_manager.add_score_csv(game_name, score, username)
 
 
 def read_data_from_csv():
-    scoreboard = create_scoreboard()
-    with open('score.csv', mode='r') as file:
-        reader = csv.reader(file)
-        next(reader)  # Skip the first row (header)
-        for row in reader:
-            scoreboard.add_row(row)
-    return scoreboard
+    while True:
+        scoreboard = create_scoreboard()
+
+        # Initialize the Score class
+        score_manager = Score()
+
+        # Use the update_score method to read data from the CSV file
+        with open(score_manager.csv_file_path, mode='r') as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip the first row (header)
+            for row in reader:
+                scoreboard.add_row(row)
+
+        display_scoreboard(scoreboard)  # Display the scoreboard
+
+        choice = input("Press 'q' to return to the Live menu or 'Enter' to refresh the scoreboard: ").strip().lower()
+
+        if choice == 'q':
+            break  # Return to the Live menu
 
 
-display_scoreboard(read_data_from_csv())
+if __name__ == "__main__":
+    display_scoreboard(read_data_from_csv())
