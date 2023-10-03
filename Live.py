@@ -1,4 +1,6 @@
 from pyfiglet import Figlet
+from beta_score import display_scoreboard, read_data_from_csv
+
 
 
 def welcome(username):
@@ -16,7 +18,7 @@ def load_game():
     while is_valid_input is False:
         f = Figlet(font='slant')
         print(f.renderText('World of Games'), end='')
-        # currently only
+
         game_chooser = str(input(
 
             f"Please choose a game to play: (To choose type the number of the game and press enter)\n"
@@ -25,13 +27,20 @@ def load_game():
             f"3. Currency Roulette - try and guess the value of a random amount of USD in ILS\n"
             f"s. Show Score Board\n"
             f"q. Quit\n"))
-        try:
-            if str(game_chooser) in ["1", "2", "3", "s", "q"]:
-                is_valid_input = True
-            else:
-                print(too_much)
-        except ValueError:
-            print(not_int)
+
+        if game_chooser == "q":
+            print("Thank you for playing, see you next time!")
+            return None
+
+        if str(game_chooser) in ["1", "2", "3", "s", "q"]:
+            is_valid_input = True
+        else:
+            print(too_much)
+
+        if game_chooser == "s":
+            display_scoreboard(read_data_from_csv())
+            load_game()
+
 
     is_valid_input = False
     while is_valid_input is False:
@@ -50,28 +59,31 @@ def load_game():
     return result
 
 
-def open_game(game_chooser, difficulty):
+def open_game(game_chooser, difficulty, username):
     if game_chooser == "1":
         from MemoryGame import play
-        return play(difficulty)
+        return play(difficulty, username)
     elif game_chooser == "2":
         from GuessGame import play
-        return play(difficulty)
+        return play(difficulty, username)
     elif game_chooser == "3":
         from CurrencyRouletteGame import play
-        return play(difficulty)
-    elif game_chooser == "s":
-        pass
-    elif game_chooser == "q":
-        print("Thank you for playing, see you next time!")
-        return None
+        return play(difficulty, username)
 
 
-def main():
+
+def main(username):
     while True:
         game_data = load_game()
         if game_data is None:
             break
         game_chooser = game_data["game_chooser"]
         difficulty = game_data["difficulty"]
-        open_game(game_chooser, difficulty)
+        open_game(game_chooser, difficulty, username)
+
+
+if __name__ == "__main__":
+    username = input("Enter your username: ")
+    welcome_msg, username = welcome(username)
+    print(welcome_msg)
+    main(username)
