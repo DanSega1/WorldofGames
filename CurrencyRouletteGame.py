@@ -17,8 +17,7 @@ value to a given amount of USD
 lost or won."""
 import random
 import requests
-# from Score import add_score_board
-
+from Score import Score
 
 # work
 def exchange_rate_api():
@@ -48,21 +47,26 @@ def get_money_interval(difficulty, exchange_rate):
     return total_value, interval
 
 
-def play(difficulty):
+def play(difficulty, username):
     exchange_rate = exchange_rate_api()
     total_value, interval = get_money_interval(difficulty, exchange_rate)
     user_guess = get_guess_from_user(total_value)
 
     if interval[0] <= user_guess <= interval[1]:
+        game_name = "Currency Roulette"
+        score_manager = Score()
+        new_txt_score, new_csv_score = score_manager.add_score(game_name, difficulty, username)
         print("Congratulations! Your guess is within the correct range.\n"
               "The correct answer is: {:.2f} ILS".format(total_value * exchange_rate))
+        print(f"Your global score is: {new_txt_score} pt")
+        print(f"Your score in {game_name} is: {new_csv_score} pt")
     else:
         print("Sorry, your guess is not within the correct range.\n"
               "The correct answer is: {:.2f} ILS".format(total_value * exchange_rate))
 
     play_again = input("Do you want to play again? (y/n) ").lower()
     if play_again == "y":
-        play(difficulty)
+        play(difficulty, username)
     else:
         print("Thank you for playing, see you next time!")
         return
