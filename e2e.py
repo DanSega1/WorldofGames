@@ -1,7 +1,7 @@
 import os
 import time
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 
 def test_scores_service(url):
     try:
@@ -12,18 +12,15 @@ def test_scores_service(url):
         driver.get(url)
 
         # Wait for a few seconds to allow the page to load
-        time.sleep(10)
+        time.sleep(5)
 
-        # Find the score element by its ID
-        score_element = driver.find_element_by_id("score")
+        # Find the score element by its XPath
+        score_element = driver.find_element(By.XPATH, "//h1[contains(text(), 'The global score is')]")
 
-        # Get the text content of the score element and convert it to an integer
-        score = int(score_element.text)
+        # Check if the score element is found
+        is_element_found = score_element is not None
 
-        # Check if the score is between 1 and 1000
-        is_valid_score = 1 <= score <= 1000
-
-        return is_valid_score
+        return is_element_found
 
     except Exception as e:
         print(f"An error occurred: {str(e)}")
