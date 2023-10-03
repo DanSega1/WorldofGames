@@ -1,7 +1,8 @@
 import random
 import time
 import Utils
-# from Score import add_score
+from Score import Score
+
 
 
 def display_numbers(numbers, duration):
@@ -32,19 +33,24 @@ def is_list_equal(generated_list, user_list):
         return False
 
 
-def play(difficulty):
+def play(difficulty, username):
     generated_list = generate_sequence(difficulty)
     print(generated_list)
     user_list = get_list_from_user(difficulty)
     print(user_list)
     if generated_list == user_list:
-        print("You won!")
-        # add_score(difficulty)
+        game_name = "Memory Game"
+        score_manager = Score()
+        new_txt_score, new_csv_score = score_manager.add_score(game_name, difficulty, username)
+        print("You won! The list was {}".format(generated_list))
+        print(f"Your global score is: {new_txt_score} pt")
+        print(f"Your score in {game_name} is: {new_csv_score} pt")
     else:
-        print("You lost!")
+        print("You lost! The list was {}".format(generated_list))
+
     play_again = input("Do you want to play again? (y/n) ").lower()
     if play_again == "y":
-        play(difficulty)
+        play(difficulty, username)
     else:
         print("Thank you for playing, see you next time!")
         return
